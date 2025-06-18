@@ -48,6 +48,28 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        if (db.Database.GetPendingMigrations().Any())
+        {
+            logger.LogInformation("Applying EF Core migrations…");
+            db.Database.Migrate();
+            logger.LogInformation("Migrations applied.");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Database migration failed");
+        throw;
+    }
+}
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
