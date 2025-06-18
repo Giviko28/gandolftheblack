@@ -1,0 +1,56 @@
+﻿@using vdl.ViewModels
+@model ResourceRequestViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="w-100" style="max-width: 500px;">
+        <h1>Azure Resource Request Form</h1>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <form asp-action="Index" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label asp-for="ResourceType" class="form-label">What Azure resource do you need?</label>
+                <select asp-for="ResourceType" class="form-select" required>
+                    <option disabled selected value="">Select resource...</option>
+                    <option value="subnet">Subnet</option>
+                    <option value="vNet">vNet</option>
+                    <option value="NSG">NSG</option>
+                    <option value="VM">VM</option>
+                    <option value="firewall">Firewall</option>
+                </select>
+                <span asp-validation-for="ResourceType" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Reason" class="form-label">Why do you need it?</label>
+                <textarea asp-for="Reason" class="form-control" rows="3" required placeholder="Describe the business need..."></textarea>
+                <span asp-validation-for="Reason" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Duration" class="form-label">How long do you need it?</label>
+                <input asp-for="Duration" type="text" class="form-control" required placeholder="e.g., 2 hours, 3 days, indefinitely" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Any special configurations or notes?</label>
+                <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Optional details or custom settings"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-dark">Submit Request</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
