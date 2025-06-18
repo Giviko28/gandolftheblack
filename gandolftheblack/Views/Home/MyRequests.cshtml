@@ -1,0 +1,48 @@
+﻿@model IEnumerable<gandolftheblack.Data.Models.ResourceRequest>
+
+@{
+    ViewData["Title"] = "My Requests";
+}
+
+<h2>My Resource Requests</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Reason</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Id</td>
+                <td>@r.ResourceType</td>
+                <td>@r.Reason</td>
+                <td>@r.Duration</td>
+                <td>
+                    @{
+                        var badgeClass = r.Status switch
+                        {
+                            "Accepted" => "bg-success",
+                            "Rejected" => "bg-danger",
+                            "Assigned" => "bg-warning text-dark",
+                            _ => "bg-secondary text-white"
+                        };
+                    }
+                    <span class="badge rounded-pill @badgeClass">
+                        @r.Status
+                    </span>
+                </td>
+                <td>@r.CreatedUtc.ToLocalTime().ToString("g")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Submit another request</a>
