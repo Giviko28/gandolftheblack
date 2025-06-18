@@ -30,6 +30,15 @@ public class AppDbContext : DbContext
             Role = "User"
         };
 
-        modelBuilder.Entity<User>().HasData(admin, user);
+        var user2 = new User
+        {
+            Id = 3,
+            Email = "user@gmail.com",
+            PasswordHash = hasher.HashPassword(null, "pass123"),
+            Role = "User"
+        };
+
+
+        modelBuilder.Entity<User>().HasData(admin, user, user2);
     }
 }
